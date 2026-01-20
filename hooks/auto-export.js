@@ -18,10 +18,10 @@ process.stdin.on('end', () => {
             process.exit(0);
         }
 
-        // Generate output filename with timestamp
+        // Generate output filename with timestamp (same as Mac format)
         const now = new Date();
         const timestamp = now.toISOString().replace(/[-:]/g, '').replace('T', '_').substring(0, 15);
-        const outputFile = path.join(cwd, `chat-${timestamp}.md`);
+        const outputFile = path.join(cwd, `claude_prompt-history-${timestamp}.md`);
 
         // Convert transcript
         convertTranscript(transcriptPath, outputFile);
