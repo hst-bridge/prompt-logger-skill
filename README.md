@@ -4,43 +4,71 @@
 
 ## 特性
 
-- ✅ 自动记录用户提示词和 Claude 响应
-- ✅ 对话编号功能 (#1, #2, ...)
-- ✅ 使用 emoji 区分用户 (👤) 和 Claude (🤖)
-- ✅ 支持 macOS/Linux 和 Windows
-- ✅ 支持 Docker/DevContainer
-- ✅ 每个会话生成独立的日志文件
+- 自动记录用户提示词和 Claude 响应
+- 对话编号功能 (#1, #2, ...)
+- 使用 emoji 区分用户 (👤) 和 Claude (🤖)
+- 支持 macOS/Linux 和 Windows
+- 支持 Docker/DevContainer
+- 每个会话生成独立的日志文件
 
-## 快速安装
+## 安装
 
-### macOS / Linux
+### 本地安装 (macOS / Linux)
 
 ```bash
-# 下载
 curl -LO https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/prompt-logger-macos.tar.gz
-
-# 解压并安装
 tar -xzf prompt-logger-macos.tar.gz
+cd prompt-logger-skill-package
 ./install.sh
 ```
 
-### Windows (PowerShell)
+### 本地安装 (Windows)
 
 ```powershell
-# 下载并解压后运行
+# 下载并解压 prompt-logger-macos.tar.gz 后
 .\install.ps1
 ```
 
-### Docker/DevContainer
+### DevContainer 安装
 
+#### 方式 1: 宿主机配置（推荐，永久生效）
+
+**macOS / Linux:**
 ```bash
-# 在现有 DevContainer 项目中安装
 curl -LO https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-devcontainer.sh
 chmod +x install-devcontainer.sh
 ./install-devcontainer.sh /path/to/your/devcontainer/project
+# 然后在 VS Code 中 Rebuild Container
 ```
 
-更多选项参考 [docker/README.md](docker/README.md)
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-devcontainer.ps1" -OutFile "install-devcontainer.ps1"
+.\install-devcontainer.ps1 -ProjectDir "C:\path\to\your\devcontainer\project"
+# 然后在 VS Code 中 Rebuild Container
+```
+
+脚本会自动在 `devcontainer.json` 中添加：
+- `postCreateCommand`: 容器创建时自动安装
+- `containerEnv.CLAUDE_PROJECT_DIR`: 日志输出目录
+
+#### 方式 2: 容器内安装（临时）
+
+```bash
+# 进入容器后执行
+curl -fsSL https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash
+```
+
+#### 方式 3: 手动配置 devcontainer.json
+
+```json
+{
+  "postCreateCommand": "curl -fsSL https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash",
+  "containerEnv": {
+    "CLAUDE_PROJECT_DIR": "${containerWorkspaceFolder}"
+  }
+}
+```
 
 ## 日志格式示例
 
@@ -73,82 +101,41 @@ chmod +x install-devcontainer.sh
 ...
 ```
 
-## 文件结构
-
-```
-prompt-logger-skill/
-├── install.sh                   # macOS/Linux 安装脚本
-├── install.ps1                  # Windows 安装脚本
-├── settings.json                # macOS/Linux Hook 配置
-├── settings-windows.json        # Windows Hook 配置
-├── hooks/
-│   ├── session-start.sh         # 会话启动脚本
-│   ├── session-start.ps1
-│   ├── log-prompt.sh            # 提示词记录脚本
-│   ├── log-prompt.ps1
-│   └── log-response.sh          # 响应记录脚本
-├── skills/
-│   └── prompt-logger/
-│       └── SKILL.md             # Skill 定义文件
-├── docker/                      # Docker/DevContainer 支持
-└── postmortem/                  # 问题记录和预防
-```
-
-## 手动安装
-
-### macOS / Linux
-
-```bash
-# 1. 复制 Skill 定义
-mkdir -p ~/.claude/skills/prompt-logger
-cp skills/prompt-logger/SKILL.md ~/.claude/skills/prompt-logger/
-
-# 2. 复制 Hook 脚本
-mkdir -p ~/.claude/hooks
-cp hooks/*.sh ~/.claude/hooks/
-chmod +x ~/.claude/hooks/*.sh
-
-# 3. 配置 settings.json
-cp settings.json ~/.claude/settings.json
-# 如已有配置，需手动合并 hooks 部分
-```
-
-### Windows
-
-```powershell
-# 1. 复制 Skill 定义
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.claude\skills\prompt-logger" -Force
-Copy-Item "skills\prompt-logger\SKILL.md" "$env:USERPROFILE\.claude\skills\prompt-logger\"
-
-# 2. 复制 Hook 脚本
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.claude\hooks" -Force
-Copy-Item "hooks\*.ps1" "$env:USERPROFILE\.claude\hooks\"
-
-# 3. 配置 settings.json
-# 参考 settings-windows.json 合并到 ~/.claude/settings.json
-```
-
 ## 生成的文件
 
 | 文件 | 说明 |
 |------|------|
-| `claude_prompt-history-*.md` | 对话历史记录 |
-| `.claude_session_date` | 会话时间戳 |
-| `.claude_msg_counter` | 消息编号计数器 |
+| `claude_prompt-history-YYYYMMDD_HHMMSS.md` | 对话历史记录 |
+| `.claude_session_date` | 会话时间戳（隐藏文件） |
+| `.claude_msg_counter` | 消息编号计数器（隐藏文件） |
 
 ## 依赖
 
-### macOS / Linux
-- `jq` - JSON 解析工具
-  ```bash
-  # macOS
-  brew install jq
-  # Linux
-  sudo apt install jq
-  ```
+| 环境 | 依赖 |
+|------|------|
+| macOS | `jq` (`brew install jq`) |
+| Linux | `jq` (`apt install jq`) |
+| Windows | PowerShell 5.0+ (系统自带) |
+| DevContainer | 自动安装 `jq` |
 
-### Windows
-- PowerShell 5.0+ (Windows 10/11 自带)
+## 文件结构
+
+```
+prompt-logger-skill/
+├── install.sh                   # 本地安装 (macOS/Linux)
+├── install.ps1                  # 本地安装 (Windows)
+├── install-devcontainer.sh      # DevContainer 配置 (macOS/Linux 宿主机)
+├── install-devcontainer.ps1     # DevContainer 配置 (Windows 宿主机)
+├── install-in-container.sh      # 容器内安装
+├── hooks/
+│   ├── session-start.sh         # 会话启动
+│   ├── log-prompt.sh            # 记录提示词
+│   └── log-response.sh          # 记录响应
+├── skills/
+│   └── prompt-logger/
+│       └── SKILL.md             # Skill 定义
+└── docker/                      # Docker/DevContainer 参考配置
+```
 
 ## 卸载
 
@@ -170,6 +157,10 @@ Remove-Item "$env:USERPROFILE\.claude\hooks\session-start.ps1"
 Remove-Item "$env:USERPROFILE\.claude\hooks\log-prompt.ps1"
 # 手动编辑 settings.json 移除 hooks 配置
 ```
+
+### DevContainer
+
+从 `devcontainer.json` 中移除 `postCreateCommand` 和 `containerEnv.CLAUDE_PROJECT_DIR`。
 
 ## License
 
