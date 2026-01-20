@@ -33,7 +33,14 @@ tar -xzf prompt-logger-macos.tar.gz
 
 ### Docker/DevContainer
 
-参考 [docker/README.md](docker/README.md)
+```bash
+# 在现有 DevContainer 项目中安装
+curl -LO https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-devcontainer.sh
+chmod +x install-devcontainer.sh
+./install-devcontainer.sh /path/to/your/devcontainer/project
+```
+
+更多选项参考 [docker/README.md](docker/README.md)
 
 ## 日志格式示例
 
