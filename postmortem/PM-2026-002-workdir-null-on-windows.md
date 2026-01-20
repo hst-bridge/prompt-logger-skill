@@ -9,7 +9,7 @@
 | **Severity** | High |
 | **Discovery Date** | 2026-01-20 |
 | **Fix Date** | 2026-01-20 |
-| **Fix Commit** | (pending) |
+| **Fix Commit** | 1e9c43c |
 | **Impact Scope** | All Windows users - prompts not being logged |
 
 ## Problem Summary
