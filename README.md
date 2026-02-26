@@ -1,5 +1,7 @@
 # Prompt Logger Skill
 
+**中文** | [日本語](./README_ja.md)
+
 自动记录 Claude Code 对话（用户提示词 + Claude 响应）到项目目录的历史文件中。
 
 ## 特性
