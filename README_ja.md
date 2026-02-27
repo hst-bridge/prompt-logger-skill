@@ -29,7 +29,7 @@ Claude Code の Plugin システムでワンクリックインストール：
 
 ```bash
 # marketplace を追加
-/plugin marketplace add liguanglai/prompt-logger-skill
+/plugin marketplace add hst-bridge/prompt-logger-skill
 
 # プラグインをインストール
 /plugin install prompt-logger@ligl-plugins
@@ -38,7 +38,7 @@ Claude Code の Plugin システムでワンクリックインストール：
 ### 方法 2: ローカルインストール (macOS / Linux)
 
 ```bash
-curl -LO https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/prompt-logger-macos.tar.gz
+curl -LO https://github.com/hst-bridge/prompt-logger-skill/releases/latest/download/prompt-logger-macos.tar.gz
 tar -xzf prompt-logger-macos.tar.gz
 cd prompt-logger-skill-package
 ./install.sh
@@ -61,7 +61,7 @@ cd prompt-logger-skill-package
 
 **macOS / Linux:**
 ```bash
-curl -LO https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-devcontainer.sh
+curl -LO https://github.com/hst-bridge/prompt-logger-skill/releases/latest/download/install-devcontainer.sh
 chmod +x install-devcontainer.sh
 ./install-devcontainer.sh /path/to/your/devcontainer/project
 # その後 VS Code で Rebuild Container
@@ -69,7 +69,7 @@ chmod +x install-devcontainer.sh
 
 **Windows (PowerShell):**
 ```powershell
-Invoke-WebRequest -Uri "https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-devcontainer.ps1" -OutFile "install-devcontainer.ps1"
+Invoke-WebRequest -Uri "https://github.com/hst-bridge/prompt-logger-skill/releases/latest/download/install-devcontainer.ps1" -OutFile "install-devcontainer.ps1"
 .\install-devcontainer.ps1 -ProjectDir "C:\path\to\your\devcontainer\project"
 # その後 VS Code で Rebuild Container
 ```
@@ -78,14 +78,14 @@ Invoke-WebRequest -Uri "https://github.com/liguanglai/prompt-logger-skill/releas
 
 ```bash
 # コンテナに入った後に実行
-curl -fsSL https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash
+curl -fsSL https://github.com/hst-bridge/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash
 ```
 
 #### devcontainer.json の手動設定
 
 ```json
 {
-  "postCreateCommand": "curl -fsSL https://github.com/liguanglai/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash",
+  "postCreateCommand": "curl -fsSL https://github.com/hst-bridge/prompt-logger-skill/releases/latest/download/install-in-container.sh | bash",
   "containerEnv": {
     "CLAUDE_PROJECT_DIR": "${containerWorkspaceFolder}"
   }
